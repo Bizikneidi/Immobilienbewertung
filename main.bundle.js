@@ -266,6 +266,15 @@ var EvaluatorService = /** @class */ (function () {
             this.answeredQuestions.splice(this.answeredQuestions.length - 1, 1);
         }
     };
+    EvaluatorService.prototype.getMaxQuestions = function () {
+        var tmp = this.selectedQuestion;
+        var numberOfQuestions = this.answered.size;
+        while (tmp.possibleAnswers[0].nextQuestion != null) {
+            tmp = tmp.possibleAnswers[0].nextQuestion;
+            numberOfQuestions++;
+        }
+        return numberOfQuestions;
+    };
     EvaluatorService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["w" /* Injectable */])(),
         __metadata("design:paramtypes", [])
@@ -331,7 +340,7 @@ module.exports = ".body-section {\r\n  background-color: lightgray;\r\n  width: 
 /***/ "./src/app/questionnaire/questionnaire.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"progress\">\n    <div class=\"progress-bar\" [style.width]=\"getProgress()\">\n      I'm helping\n    </div>\n  </div>\n</div>\n\n\n<div class=\"container body-section\">\n  <div class=\"\">\n    <h1>{{question.text}}</h1>\n  </div>\n  <div class=\"possibilityRow\">\n    <span *ngFor=\"let possibility of question.possibleAnswers\">\n      <button *ngIf=\"question.type === 'button'\" (click)=\"onAnswerClicked(possibility)\"\n              [ngClass]=\"'possibility ' + question.classForHTMLElement + ' ' + getSelected(possibility)\">{{possibility.answerText}}</button>\n\n      <img [title]=\"possibility.answerValue\" *ngIf=\"question.type === 'image'\" [alt]=\"possibility.answerText\" (click)=\"onAnswerClicked(possibility)\"\n           [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\"\n           [src]=\"possibility.imgSrc\"/>\n\n      <label *ngIf=\"question.type === 'input'\">{{possibility.answerText}}\n        <input class=\"\" name=\"inputValue\" [type]=\"getType()\" *ngIf=\"question.type === 'input'\"\n               [(ngModel)]=\"possibility.answerValue\"\n               (keyup)=\"onInputDetected(possibility)\"\n               [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\">\n      </label>\n      <div *ngIf=\"question.type === 'multiInput'\" class=\"form-group row\">\n        <label class=\"\">{{possibility.answerText}}\n        <input class=\"\" name=\"multiInputValue\" type=\"text\" [(ngModel)]=\"possibility.answerValue\"\n               (keyup)=\"onInputDetected(possibility)\"\n               [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\">\n        </label>\n      </div>\n    </span>\n  </div>\n  <div class=\"\">\n    <button class=\"btn\" (click)=\"evaluator.goBack(chosen)\">Zurück</button>\n    <button class=\"btn\" (click)=\"evaluateAnswer()\" [disabled]=\"chosen === undefined\">Weiter</button>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"progress\">\n    <div class=\"progress-bar\" [style.width]=\"getProgress()\">\n      Frage {{evaluator.answered.size}} von {{evaluator.getMaxQuestions()}}\n    </div>\n  </div>\n</div>\n\n\n<div class=\"container body-section\">\n  <div class=\"\">\n    <h1>{{question.text}}</h1>\n  </div>\n  <div class=\"possibilityRow\">\n    <span *ngFor=\"let possibility of question.possibleAnswers\">\n      <button *ngIf=\"question.type === 'button'\" (click)=\"onAnswerClicked(possibility)\"\n              [ngClass]=\"'possibility ' + question.classForHTMLElement + ' ' + getSelected(possibility)\">{{possibility.answerText}}</button>\n\n      <img [title]=\"possibility.answerValue\" *ngIf=\"question.type === 'image'\" [alt]=\"possibility.answerText\" (click)=\"onAnswerClicked(possibility)\"\n           [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\"\n           [src]=\"possibility.imgSrc\"/>\n\n      <label *ngIf=\"question.type === 'input'\">{{possibility.answerText}}\n        <input class=\"\" name=\"inputValue\" [type]=\"getType()\" *ngIf=\"question.type === 'input'\"\n               [(ngModel)]=\"possibility.answerValue\"\n               (keyup)=\"onInputDetected(possibility)\"\n               [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\">\n      </label>\n      <div *ngIf=\"question.type === 'multiInput'\" class=\"form-group row\">\n        <label class=\"\">{{possibility.answerText}}\n        <input class=\"\" name=\"multiInputValue\" type=\"text\" [(ngModel)]=\"possibility.answerValue\"\n               (keyup)=\"onInputDetected(possibility)\"\n               [ngClass]=\"question.classForHTMLElement + ' ' + getSelected(possibility)\">\n        </label>\n      </div>\n    </span>\n  </div>\n  <div class=\"\">\n    <button class=\"btn\" (click)=\"evaluator.goBack(chosen)\">Zurück</button>\n    <button class=\"btn\" (click)=\"evaluateAnswer()\" [disabled]=\"chosen === undefined\">Weiter</button>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -358,7 +367,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var QuestionnaireComponent = /** @class */ (function () {
     function QuestionnaireComponent(evaluator) {
         this.evaluator = evaluator;
-        this.completionRate = 80;
     }
     QuestionnaireComponent.prototype.ngOnChanges = function () {
         this.question.possibleAnswers.forEach(function (p) { return p.isSelected = false; });
@@ -373,7 +381,7 @@ var QuestionnaireComponent = /** @class */ (function () {
         return '';
     };
     QuestionnaireComponent.prototype.getProgress = function () {
-        return this.completionRate + '%';
+        return (this.evaluator.answered.size / this.evaluator.getMaxQuestions() * 100) + '%';
     };
     QuestionnaireComponent.prototype.getType = function () {
         if (this.question.classForHTMLElement.includes('number')) {
