@@ -42,7 +42,7 @@ module.exports = "/*!\n * Bootstrap v3.3.7 (http://getbootstrap.com)\n * Copyrig
 /***/ "./node_modules/raw-loader/index.js!./node_modules/postcss-loader/lib/index.js??embedded!./src/styles.css":
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\n:root {\n  text-align: center\n}\nh1 {\n  font-family: 'Josefin Sans', sans-serif;\n  color: #848185;\n}\nbutton {\n  padding-left: 10px;\n  padding-right: 10px;\n  padding-top: 20px;\n  padding-bottom: 20px;\n  display: inline-block;\n  background-color: lightgreen;\n  fill: lightgreen\n}\n\n\n\n"
+module.exports = "/* You can add global styles to this file, and also import other style files */\n:root {\n  text-align: center\n}\nh1 {\n  font-family: 'Josefin Sans', sans-serif;\n  color: #848185;\n}\nbutton {\n  padding: 20px 10px;\n  display: inline-block;\n  background-color: lightgreen;\n  fill: lightgreen\n}\n\n\n\n"
 
 /***/ }),
 
