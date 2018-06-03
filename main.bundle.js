@@ -360,17 +360,17 @@ var QuestionnaireComponent = /** @class */ (function () {
         this.evaluator = evaluator;
         this.completionRate = 0.8;
     }
-    QuestionnaireComponent.getSelected = function (possibility) {
-        if (possibility.isSelected) {
-            return 'selected';
-        }
-        return '';
-    };
     QuestionnaireComponent.prototype.ngOnChanges = function () {
         this.question.possibleAnswers.forEach(function (p) { return p.isSelected = false; });
         if (this.question.type === 'input') {
             this.chosen = this.question.possibleAnswers[0];
         }
+    };
+    QuestionnaireComponent.prototype.getSelected = function (possibility) {
+        if (possibility.isSelected) {
+            return 'selected';
+        }
+        return '';
     };
     QuestionnaireComponent.prototype.getProgress = function () {
         return 'width:' + this.completionRate;
