@@ -358,7 +358,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var QuestionnaireComponent = /** @class */ (function () {
     function QuestionnaireComponent(evaluator) {
         this.evaluator = evaluator;
-        this.completionRate = 0.8;
+        this.completionRate = 80;
     }
     QuestionnaireComponent.prototype.ngOnChanges = function () {
         this.question.possibleAnswers.forEach(function (p) { return p.isSelected = false; });
@@ -373,7 +373,7 @@ var QuestionnaireComponent = /** @class */ (function () {
         return '';
     };
     QuestionnaireComponent.prototype.getProgress = function () {
-        return 'width:' + this.completionRate;
+        return 'width:' + this.completionRate + '%';
     };
     QuestionnaireComponent.prototype.getType = function () {
         if (this.question.classForHTMLElement.includes('number')) {
